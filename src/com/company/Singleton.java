@@ -6,6 +6,8 @@ import java.util.List;
 public class Singleton {
     private static Singleton instance;
 
+    long timer;
+
     //locks for thread scopes to adjust their work
     final Object lock1 = new Object();
     final Object lock2 = new Object();

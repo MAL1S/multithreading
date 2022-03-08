@@ -20,6 +20,7 @@ public class MyThread3 extends Thread {
                 instance.lock2.notify(); //wake up thread1 when removing element from it
             }
         }
+        System.out.println("timer = " + (System.currentTimeMillis() - instance.timer));
         System.out.println("third end");
         instance.isThird = false;
     }

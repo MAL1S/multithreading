@@ -19,22 +19,23 @@ public class MyThread2 extends Thread {
             //to prevent different knowledge about determined buffer
             synchronized (instance.lock2) {
 
-                //to prevent removing element while thread1 doesn't know about it
-                synchronized (instance.lock1) {
-                    var b = instance.buffer1.get(index);
-                    //System.out.println(b);
-                    var a = Math.tan(b);
-                    instance.buffer2.add(a);
-                    System.out.println("== " + instance.buffer2.size() + " " + instance.buffer2);
-                    instance.buffer1.remove(index);
-                    instance.lock1.notify(); //wake up thread1 when removing element from it
-                }
-
-                if (instance.buffer2.size() <= instance.N) {
+                if (instance.buffer2.size() >= instance.N) {
                     try {
-                        instance.lock2.wait(); //pause thread2 to work with other threads in one time
+                        instance.lock2.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    }
+
+                } else {
+                    //to prevent removing element while thread1 doesn't know about it
+                    synchronized (instance.lock1) {
+                        var b = instance.buffer1.get(index);
+                        //System.out.println(b);
+                        var a = Math.tan(b);
+                        instance.buffer2.add(a);
+                        System.out.println("== " + instance.buffer2.size() + " " + instance.buffer2);
+                        instance.buffer1.remove(index);
+                        instance.lock1.notify(); //wake up thread1 when removing element from it
                     }
                 }
             }
